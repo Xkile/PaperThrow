@@ -75,11 +75,25 @@ public class Swipe : MonoBehaviour
 			 #endif
 	}
 
-  /* private void OnTriggerEnter(Collider other) {
-       print("Triggered");
-       CancelInvoke("DestroyMe");
-       Destroy(this.GetComponent<Swipe>());
-    }*/
+    /* private void OnTriggerEnter(Collider other) {
+         print("Triggered");
+         CancelInvoke("DestroyMe");
+         Destroy(this.GetComponent<Swipe>());
+      }*/
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.transform.name == "Floor")
+        {
+			Invoke("TrailOff", 1f);
+			
+        }
+    }
+
+	void TrailOff()
+    {
+		this.GetComponent<TrailRenderer>().enabled = false;
+	}
 
     void DestroyMe(){
         Destroy(gameObject,0.1f);
