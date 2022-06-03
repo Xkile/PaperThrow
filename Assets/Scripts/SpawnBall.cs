@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.Experimental.Playables;
 using System.Threading;
 //using System.Numerics;
+using UnityEngine.SceneManagement;
 
 public class SpawnBall : MonoBehaviour
 {
@@ -30,6 +31,7 @@ public class SpawnBall : MonoBehaviour
     public bool startGame;
     public GameObject TimerImage;
     public bool oneTime;
+    public GameObject GameOverCanvas;
 
    private void Awake() {
        highScore.text = PlayerPrefs.GetInt("HighScore",0).ToString();
@@ -40,17 +42,18 @@ public class SpawnBall : MonoBehaviour
 
    void Update(){
        print(pointsAdd.transform.position);
-      /* if(startGame){
-           if (oneTime){
+      if(startGame){
+          /* if (oneTime){
                oneTime = false;
                TimerImage.transform.DOScale(new Vector3(0.026f,0.026f,0.026f),1f);
-           }
+           }*/
         if(miliseconds <= 0){
            
            
         if(seconds <= (0)){
             startGame = false;
             GameOver();
+            return;
         }
         else if(seconds >= 0){
             seconds--;
@@ -59,7 +62,7 @@ public class SpawnBall : MonoBehaviour
         }
     miliseconds -= Time.deltaTime * 100;
     timer.text = string.Format("{0}:{1}", seconds, (int)miliseconds);
-    }*/
+    }
     }
    
 
@@ -99,13 +102,22 @@ public class SpawnBall : MonoBehaviour
         
     }
 
+    public void resetHighScore(){
+        PlayerPrefs.DeleteAll();
+    }
+
     void resetPos(){
         pointsAdd.transform.position = new Vector3(971, 400, 0);
         ParticleShow.SetActive(false);
     }
 
     void GameOver(){
+        GameOverCanvas.SetActive(true);
+        SwipeOn = false;
+    }
 
+    public void Restart(){  
+        SceneManager.LoadScene(0);
     }
 
     public void Quit(){

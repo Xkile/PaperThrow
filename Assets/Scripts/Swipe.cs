@@ -54,7 +54,7 @@ public class Swipe : MonoBehaviour
 			rb.isKinematic = false;
 			rb.AddForce (- direction.x * throwForceInXandY, - direction.y * throwForceInXandY, throwForceInZ / timeInterval);
 
-			Destroy ball in 4 seconds
+			//Destroy ball in 4 seconds
 			Invoke("DestroyMe",3f);
 
 		}

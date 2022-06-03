@@ -10,10 +10,10 @@ namespace TheDeveloper.ColorChanger
      * YouTube Channel: https://www.youtube.com/channel/UCwO0k5dccZrTW6-GmJsiFrg
      * Website: https://thedevelopers.tech
      */
-    [CustomEditor(typeof(PS_ColorChanger))]
-    public class PS_ColorChangerEditor : Editor
+    /*[CustomEditor(typeof(PS_ColorChanger))]*/
+    public class PS_ColorChangerEditor 
     {
-        public override void OnInspectorGUI()
+       /* public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
 
@@ -21,6 +21,6 @@ namespace TheDeveloper.ColorChanger
                 ((PS_ColorChanger)target).ChangeColor();
             if (GUILayout.Button("Swap \"Current\" with \"New\" colors"))
                 ((PS_ColorChanger)target).SwapCurrentWithNewColors();
-        }
+        }*/
     }
 }
