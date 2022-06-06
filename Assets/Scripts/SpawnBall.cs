@@ -32,6 +32,7 @@ public class SpawnBall : MonoBehaviour
     public GameObject TimerImage;
     public bool oneTime;
     public GameObject GameOverCanvas;
+    public GameObject MenuCanvas;
 
    private void Awake() {
        highScore.text = PlayerPrefs.GetInt("HighScore",0).ToString();
@@ -112,6 +113,7 @@ public class SpawnBall : MonoBehaviour
     }
 
     void GameOver(){
+        MenuCanvas.GetComponent<GraphicRaycaster>().enabled = false;
         GameOverCanvas.SetActive(true);
         SwipeOn = false;
     }

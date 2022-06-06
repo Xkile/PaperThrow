@@ -16,17 +16,72 @@ public class Swipe : MonoBehaviour
 
 	Rigidbody rb;
 
+	public bool play;
+
 	void Start()
 	{
+		play = false;
 		rb = GetComponent<Rigidbody> ();
 	}
 
 	// Update is called once per frame
 	void Update () {
 		if(SpawnBall.instance.SwipeOn){
-        #if !UNITY_EDITOR
+#if !UNITY_EDITOR
+
+		if (Input.touchCount != 1)
+            {
+				play = false;
+				return;
+            }
+
+			Touch touch = Input.touches[0];
+			Vector3 pos = touch.position;
+
+		if(Input.GetTouch(0).phase == TouchPhase.Began)
+            {
+				RaycastHit hit;
+				Ray ray = Camera.main.ScreenPointToRay(pos);
+
+				if(Physics.Raycast(ray, out hit) && hit.collider.tag == "ball"){
+					SpawnBall.instance.startGame = true;
+
+					// getting touch position and marking time when you touch the screen
+					touchTimeStart = Time.time;
+					startPos = Input.GetTouch(0).position;
+					play = true;
+				}
+
+				
+			}
+
+			if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && play)
+				{
+					SpawnBall.instance.SwipeOn = false;
+					// marking time when you release it
+					touchTimeFinish = Time.time;
+
+					// calculate swipe time interval 
+					timeInterval = touchTimeFinish - touchTimeStart;
+
+					// getting release finger position
+					endPos = Input.GetTouch(0).position;
+
+					// calculating swipe direction in 2D space
+					direction = startPos - endPos;
+
+					// add force to balls rigidbody in 3D space depending on swipe time, direction and throw forces
+					rb.isKinematic = false;
+					rb.AddForce(direction.x * throwForceInXandY, -direction.y * throwForceInXandY, -throwForceInZ / timeInterval);
+
+					//Destroy ball in 4 seconds
+					Invoke("DestroyMe", 3f);
+
+				}
+
+
 		// if you touch the screen
-		if (Input.touchCount > 0 && Input.GetTouch (0).phase == TouchPhase.Began || Input.GetMouseButtonDown(0)) {
+	/*	if (Input.touchCount > 0 && Input.GetTouch (0).phase == TouchPhase.Began && play ) {
 			SpawnBall.instance.startGame = true;
 
 			// getting touch position and marking time when you touch the screen
@@ -35,8 +90,7 @@ public class Swipe : MonoBehaviour
 		}
 
 		// if you release your finger
-		if (Input.touchCount > 0 && Input.GetTouch (0).phase == TouchPhase.Ended || Input.GetMouseButtonUp(0)) {
-
+		if (Input.touchCount > 0 && Input.GetTouch (0).phase == TouchPhase.Ended ) {
 			SpawnBall.instance.SwipeOn = false;
 			// marking time when you release it
 			touchTimeFinish = Time.time;
@@ -52,15 +106,16 @@ public class Swipe : MonoBehaviour
 
 			// add force to balls rigidbody in 3D space depending on swipe time, direction and throw forces
 			rb.isKinematic = false;
-			rb.AddForce (- direction.x * throwForceInXandY, - direction.y * throwForceInXandY, throwForceInZ / timeInterval);
+			rb.AddForce (direction.x * throwForceInXandY,  -direction.y * throwForceInXandY, -throwForceInZ / timeInterval);
 
 			//Destroy ball in 4 seconds
 			Invoke("DestroyMe",3f);
 
 		}
+	*/
 
-        #else 
-         if (Input.GetMouseButtonDown(0))                                     //if mouse button down is pressed then mouse position and time will be stored.
+#else
+			if (Input.GetMouseButtonDown(0) )                                     //if mouse button down is pressed then mouse position and time will be stored.
             {
 				SpawnBall.instance.startGame = true;
                 touchTimeStart = Time.time;
@@ -82,7 +137,16 @@ public class Swipe : MonoBehaviour
 		}
 	}
 
-    	private void OnTriggerEnter(Collider other) {
+			public void PlayOn()
+		{
+			play = true;
+		}
+
+			public void PlayOff()
+			{
+				play = false;
+			}
+	private void OnTriggerEnter(Collider other) {
 			SpawnBall.instance.InceaseScore();
 			print("ScoreIncreased");
          CancelInvoke("DestroyMe");
