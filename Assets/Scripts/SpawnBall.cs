@@ -5,6 +5,7 @@ using UnityEngine.Experimental.Playables;
 using System.Threading;
 //using System.Numerics;
 using UnityEngine.SceneManagement;
+using UnityEditor.UIElements;
 
 public class SpawnBall : MonoBehaviour
 {
@@ -33,13 +34,16 @@ public class SpawnBall : MonoBehaviour
     public bool oneTime;
     public GameObject GameOverCanvas;
     public GameObject MenuCanvas;
+    public GameObject SettingsCanvas;
     public bool removeTimer;
+    public bool OnceMoreButton;
 
    private void Awake() {
        highScore.text = PlayerPrefs.GetInt("HighScore",0).ToString();
        instance = this;
        score = 0;
        SwipeOn = true;
+       OnceMoreButton = true;
    }
 
    void Update(){
@@ -77,6 +81,14 @@ public class SpawnBall : MonoBehaviour
         removeTimer = false;
     }
 
+    public void OnceMoreOn(){
+        OnceMoreButton = true;
+    }
+
+    public void OnceMoreOff(){
+        OnceMoreButton = false;
+    }
+
 
     public void SwipeEnable(){
        SwipeOn = true;
@@ -96,7 +108,7 @@ public class SpawnBall : MonoBehaviour
         newBall.transform.rotation = Quaternion.Euler(-90,0,0);
        // newBall.transform.SetParent(ballParent.transform);
         //newBall.transform.localScale = new Vector3 (0.05f,0.05f,0.05f);
-
+        print("Swipe On : "+SwipeOn);
 	}
 
     public void InceaseScore(){
@@ -124,7 +136,8 @@ public class SpawnBall : MonoBehaviour
     }
 
     void GameOver(){
-        MenuCanvas.GetComponent<GraphicRaycaster>().enabled = false;
+        MenuCanvas.transform.GetComponent<GraphicRaycaster>().enabled = false;
+        SettingsCanvas.SetActive(false);
         GameOverCanvas.SetActive(true);
         SwipeOn = false;
     }

@@ -17,6 +17,7 @@ public class Swipe : MonoBehaviour
 	Rigidbody rb;
 
 	public bool play;
+	
 
 	void Start()
 	{
@@ -74,7 +75,14 @@ public class Swipe : MonoBehaviour
 					rb.isKinematic = false;
 					rb.AddForce(direction.x * throwForceInXandY, -direction.y * throwForceInXandY, -throwForceInZ / timeInterval);
 
-					//Destroy ball in 4 seconds
+					/*if(SpawnBall.instance.OnceMoreButton){
+						
+						Invoke("SpawnTheBall",2f);
+						Invoke("DestroyMe", 3f);
+					}else{
+						//Destroy ball in 3 seconds
+						Invoke("DestroyMe", 3f);
+					}*/
 					Invoke("DestroyMe", 3f);
 
 				}
@@ -131,11 +139,26 @@ public class Swipe : MonoBehaviour
                 direction = startPos - endPos;
                 rb.isKinematic = false;
                 rb.AddForce (  direction.x * throwForceInXandY, - direction.y * throwForceInXandY, - throwForceInZ / timeInterval);    //To add force on ball
-                Invoke("DestroyMe",3f);
+				Invoke("DestroyMe", 3f);
+                /*if(SpawnBall.instance.OnceMoreButton){
+						
+						//Destroy ball in 3 seconds
+						
+					}else{
+						
+
+
+						Invoke("SpawnTheBall",2f);
+						Invoke("DestroyMe", 3f);
+					}*/
             }
 			 #endif
 		}
 	}
+
+		void SpawnTheBall(){
+			SpawnBall.instance.Spawn();
+		}
 
 			public void PlayOn()
 		{
@@ -146,6 +169,7 @@ public class Swipe : MonoBehaviour
 			{
 				play = false;
 			}
+
 	private void OnTriggerEnter(Collider other) {
 			SpawnBall.instance.InceaseScore();
 			print("ScoreIncreased");
@@ -156,7 +180,7 @@ public class Swipe : MonoBehaviour
 
 	  void stopMovement(){
 		  this.GetComponent<Rigidbody>().isKinematic = true;
-		  SpawnBall.instance.SpawnButton.interactable = true;
+		 SpawnBall.instance.SpawnButton.interactable = true;
 		  Destroy(this.GetComponent<Swipe>());
 	  }
 
