@@ -33,6 +33,7 @@ public class SpawnBall : MonoBehaviour
     public bool oneTime;
     public GameObject GameOverCanvas;
     public GameObject MenuCanvas;
+    public bool removeTimer;
 
    private void Awake() {
        highScore.text = PlayerPrefs.GetInt("HighScore",0).ToString();
@@ -43,7 +44,7 @@ public class SpawnBall : MonoBehaviour
 
    void Update(){
        print(pointsAdd.transform.position);
-      if(startGame){
+      if(startGame && !removeTimer){
           /* if (oneTime){
                oneTime = false;
                TimerImage.transform.DOScale(new Vector3(0.026f,0.026f,0.026f),1f);
@@ -65,9 +66,19 @@ public class SpawnBall : MonoBehaviour
     timer.text = string.Format("{0}:{1}", seconds, (int)miliseconds);
     }
     }
-   
 
-   public void SwipeEnable(){
+    public void TimerOff()
+    {
+        removeTimer = true;
+    }
+
+    public void TimerOn()
+    {
+        removeTimer = false;
+    }
+
+
+    public void SwipeEnable(){
        SwipeOn = true;
    }
 
