@@ -37,7 +37,7 @@ public class SpawnBall : MonoBehaviour
     public GameObject SettingsCanvas;
     public bool removeTimer;
     public bool OnceMoreButton;
-
+    public GameObject GameParent;
    private void Awake() {
        highScore.text = PlayerPrefs.GetInt("HighScore",0).ToString();
        instance = this;
@@ -104,8 +104,13 @@ public class SpawnBall : MonoBehaviour
         print("Spawning ball");
         TargetColl.enabled = true;
         SwipeOn = true;
-		newBall  = Instantiate (ball, new Vector3(-0.83f, 0.885f, 3.01f), Quaternion.identity);
+		//newBall  = Instantiate (ball, new Vector3(-0.83f, 0.885f, 3.01f), Quaternion.identity);
+       
+        newBall  = Instantiate (ball, new Vector3(-0.42f, 0.8f, 3.01f), Quaternion.identity);
+         newBall.transform.SetParent(GameParent.transform);
+         newBall.transform.localPosition = new Vector3(-0.42f, 0.8f, 3.01f);
         newBall.transform.rotation = Quaternion.Euler(-90,0,0);
+        
        // newBall.transform.SetParent(ballParent.transform);
         //newBall.transform.localScale = new Vector3 (0.05f,0.05f,0.05f);
         print("Swipe On : "+SwipeOn);

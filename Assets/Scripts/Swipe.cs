@@ -28,6 +28,10 @@ public class Swipe : MonoBehaviour
 	// Update is called once per frame
 	void Update () {
 		if(SpawnBall.instance.SwipeOn){
+			//For MR
+
+			//Not For MR
+			/*
 #if !UNITY_EDITOR
 
 		if (Input.touchCount != 1)
@@ -83,9 +87,11 @@ public class Swipe : MonoBehaviour
 						//Destroy ball in 3 seconds
 						Invoke("DestroyMe", 3f);
 					}*/
-					Invoke("DestroyMe", 3f);
+				//	Invoke("DestroyMe", 3f);
 
-				}
+		//		}
+			
+
 
 
 		// if you touch the screen
@@ -120,7 +126,7 @@ public class Swipe : MonoBehaviour
 			Invoke("DestroyMe",3f);
 
 		}
-	*/
+	
 
 #else
 			if (Input.GetMouseButtonDown(0) )                                     //if mouse button down is pressed then mouse position and time will be stored.
@@ -151,10 +157,45 @@ public class Swipe : MonoBehaviour
 						Invoke("SpawnTheBall",2f);
 						Invoke("DestroyMe", 3f);
 					}*/
-            }
-			 #endif
+         //   }
+	//		 #endif
+	//	}*/
+		// Closing Not For MR
 		}
 	}
+
+		public void BallPick(){
+			
+			touchTimeStart = Time.time;
+			startPos = this.transform.position;
+			print ("Start Pos:"+ startPos);
+		}
+
+		public void BallThrow(){
+			touchTimeFinish = Time.time;
+
+					// calculate swipe time interval 
+					timeInterval = touchTimeFinish - touchTimeStart;
+
+					// getting release finger position
+					endPos = this.transform.position;
+					print("end postion: "+endPos);
+					// calculating swipe direction in 2D space
+					direction = startPos - endPos;
+					
+
+					// add force to balls rigidbody in 3D space depending on swipe time, direction and throw forces
+					//rb.isKinematic = false;
+					rb.AddForce(- direction.x * throwForceInXandY, - direction.y * throwForceInXandY,  throwForceInZ  / timeInterval);
+					Invoke("DestroyMe",3f);
+					//rb.AddForce(1000,0,0);
+		}
+
+		public void checkAddForce(){
+
+		}
+
+
 
 		void SpawnTheBall(){
 			SpawnBall.instance.Spawn();
@@ -179,7 +220,7 @@ public class Swipe : MonoBehaviour
       }
 
 	  void stopMovement(){
-		  this.GetComponent<Rigidbody>().isKinematic = true;
+		 // this.GetComponent<Rigidbody>().isKinematic = true;
 		 SpawnBall.instance.SpawnButton.interactable = true;
 		  Destroy(this.GetComponent<Swipe>());
 	  }
